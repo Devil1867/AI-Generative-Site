@@ -354,3 +354,29 @@ input[type="text"]::placeholder {
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
 }
+/* Signature Footer */
+.creator-footer {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--panel-border);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.creator-footer .signature {
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: opacity 0.2s ease;
+}
+
+.creator-footer .signature:hover {
+  opacity: 0.85;
+}
