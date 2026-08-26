@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Studio</title>
+    <link rel="stylesheet" href="/Gen.css">
+</head>
+<body>
+    <canvas id="fireflies-canvas"></canvas>
+
+    <div class="container">
+        <span class="badge">Next-Gen Engine</span>
+        <h1>AI Image Studio</h1>
+        <p class="subtitle">Turn plain language descriptions into high-fidelity visuals</p>
+
+        <form action="/generate" method="post" id="genForm" onsubmit="startLoading(event)">
+            <div class="prompt-box">
+                <div class="input-row">
+                    <input type="text" name="prompt" id="promptInput" placeholder="A cosmic observatory above a vibrant magenta nebula..." required autofocus autocomplete="off">
+                    <button type="button" class="btn-icon" onclick="applySurprisePrompt()" title="Surprise Me">
+                        🎲 <span>Surprise Me</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interactive Quick Modifiers -->
+            <div class="tag-container">
+                <span class="tag-label">Enhance:</span>
+                <span class="tag-chip" onclick="appendTag('cinematic lighting, 8k')">+ Cinematic</span>
+                <span class="tag-chip" onclick="appendTag('cyberpunk synthwave aesthetic')">+ Cyberpunk</span>
+                <span class="tag-chip" onclick="appendTag('photorealistic, sharp focus')">+ Realistic</span>
+                <span class="tag-chip" onclick="appendTag('digital matte painting fantasy')">+ Fantasy</span>
+            </div>
+
+            <!-- Resolution & Aspect Ratio -->
+            <div class="config-grid">
+                <div class="config-group">
+                    <label>Resolution Quality</label>
+                    <div class="segmented-control">
+                        <input type="radio" id="resLow" name="res" value="512">
+                        <label for="resLow">512px (Fast)</label>
+
+                        <input type="radio" id="resMed" name="res" value="768">
+                        <label for="resMed">768px (Med)</label>
+
+                        <input type="radio" id="resHigh" name="res" value="1024" checked>
+                        <label for="resHigh">1024px (High)</label>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <label>Aspect Ratio</label>
+                    <div class="segmented-control">
+                        <input type="radio" id="ratio11" name="ratio" value="1:1" checked>
+                        <label for="ratio11">1:1 Square</label>
+
+                        <input type="radio" id="ratio34" name="ratio" value="3:4">
+                        <label for="ratio34">3:4 Portrait</label>
+
+                        <input type="radio" id="ratio169" name="ratio" value="16:9">
+                        <label for="ratio169">16:9 Wide</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-primary">Generate Artwork</button>
+
+            <!-- Loading & Progress Bar -->
+            <div class="loading-wrapper" id="loadingWrapper">
+                <div class="loading-header">
+                    <span id="loadingStatus">Synthesizing pixels...</span>
+                    <span id="loadingPercent">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // 1. Surprise Me Prompts Library
+        const samplePrompts = [
+            "A sleek modern workspace floating in a deep nebula atmosphere with neon emerald code lines streaming across transparent glass screens",
+            "A solitary explorer with a backpack standing at the ridge of a misty mountain hill at twilight, gazing under a vivid night-flash celestial sky",
+            "A retro-futuristic vinyl disc dissolving into glowing neon dust particles, surrounded by electric violet and emerald soundwave ripples",
+            "Intertwined, luminous glyphs and typographic characters floating like constellations across a deep cosmic void",
+            "An ancient obsidian pagoda overgrown with glowing blue flora on an alien planet under twin moons"
+        ];
+
+        function applySurprisePrompt() {
+            const randomIndex = Math.floor(Math.random() * samplePrompts.length);
+            const promptInput = document.getElementById('promptInput');
+            promptInput.value = samplePrompts[randomIndex];
+            promptInput.focus();
+        }
+
+        function appendTag(tag) {
+            const promptInput = document.getElementById('promptInput');
+            promptInput.value = promptInput.value.trim() ? promptInput.value.trim() + ", " + tag : tag;
+            promptInput.focus();
+        }
+
+        function startLoading(e) {
+            document.getElementById('loadingWrapper').style.display = 'block';
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.6';
+            submitBtn.style.cursor = 'not-allowed';
+
+            let progress = 0;
+            const fill = document.getElementById('progressFill');
+            const percent = document.getElementById('loadingPercent');
+            const status = document.getElementById('loadingStatus');
+
+            const interval = setInterval(() => {
+                if (progress < 90) {
+                    progress += Math.floor(Math.random() * 8) + 2;
+                    if (progress > 90) progress = 90;
+                    fill.style.width = progress + '%';
+                    percent.innerText = progress + '%';
+
+                    if (progress > 30 && progress < 70) status.innerText = 'Applying neural diffusion...';
+                    if (progress >= 70) status.innerText = 'Refining high-frequency details...';
+                }
+            }, 300);
+        }
+
+        // 2. Interactive Background Fireflies Animation
+        const canvas = document.getElementById('fireflies-canvas');
+        const ctx = canvas.getContext('2d');
+        let fireflies = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Firefly {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.2 + 0.8;
+                this.speedX = (Math.random() - 0.5) * 0.7;
+                this.speedY = (Math.random() - 0.5) * 0.7;
+                this.alpha = Math.random() * 0.8 + 0.2;
+                this.alphaSpeed = (Math.random() * 0.02 + 0.005) * (Math.random() > 0.5 ? 1 : -1);
+                this.color = Math.random() > 0.5 ? '6, 182, 212' : '192, 132, 252';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha += this.alphaSpeed;
+
+                if (this.alpha <= 0.1 || this.alpha >= 0.9) this.alphaSpeed *= -1;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `rgb(${this.color})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) fireflies.push(new Firefly());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            fireflies.forEach(f => { f.update(); f.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
