@@ -14,7 +14,9 @@ import java.util.Map;
 
 public class Gen {
 
-    private static final int PORT = 9090;
+    private static final int PORT = System.getenv("PORT") != null 
+        ? Integer.parseInt(System.getenv("PORT")) 
+        : 9090;
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
