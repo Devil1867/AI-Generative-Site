@@ -165,7 +165,12 @@ public class Gen {
                 sb.append("<button class='btn-download' onclick=\"downloadImage('").append(imageUrl).append("')\">⬇ Download High-Res</button>");
                 sb.append("</div></div>");
             }
-
+            // <-- INSERT SIGNATURE HERE
+            sb.append("<footer class='creator-footer'>");
+            sb.append("<span>Engineered with ⚡ by</span> ");
+            sb.append("<a href='https://github.com/yourusername' target='_blank' class='signature'>Hrituraj Deb</a>");
+            sb.append("</footer>");
+            
             sb.append("</div>");
 
             // Client scripts for downloading & animations
