@@ -93,10 +93,20 @@ public class Gen {
                 height = (int) (baseDim * 0.5625);
             }
 
-            // Generate URL using calculated dimensions
+            // Extract model, seed, and enhance options
+            String model = params.getOrDefault("model", "flux");
+            String seed = params.getOrDefault("seed", String.valueOf((int)(Math.random() * 100000)));
+            boolean enhance = "true".equalsIgnoreCase(params.getOrDefault("enhance", "false"));
+
+            // Generate high-fidelity URL
             String encodedPrompt = java.net.URLEncoder.encode(prompt, StandardCharsets.UTF_8);
             String imageUrl = "https://image.pollinations.ai/prompt/" + encodedPrompt 
-                            + "?width=" + width + "&height=" + height + "&nologo=true";
+                            + "?width=" + width 
+                            + "&height=" + height 
+                            + "&model=" + model 
+                            + "&seed=" + seed 
+                            + "&enhance=" + enhance 
+                            + "&nologo=true";
 
             String htmlResponse = buildHtml(prompt, imageUrl, width, height, ratio);
             byte[] bytes = htmlResponse.getBytes(StandardCharsets.UTF_8);
