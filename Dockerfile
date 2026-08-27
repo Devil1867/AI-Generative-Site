@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Compile the Java server
-RUN javac Gen.java
+RUN javac -encoding UTF-8 Gen.java
 
 # Expose port and run
 EXPOSE 9090
