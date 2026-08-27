@@ -131,7 +131,7 @@ public class Gen {
             StringBuilder sb = new StringBuilder();
             sb.append("<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>");
             sb.append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>");
-            sb.append("<title>AI Image Studio</title>");
+            sb.append("<title>Helax Image Studio</title>");
             sb.append("<link rel='stylesheet' href='/Gen.css'></head><body>");
             sb.append("<canvas id='fireflies-canvas'></canvas>");
             sb.append("<div class='container'>");
@@ -168,7 +168,7 @@ public class Gen {
             // <-- INSERT SIGNATURE HERE
             sb.append("<footer class='creator-footer'>");
             sb.append("<span>Engineered with ⚡ by</span> ");
-            sb.append("<a href='https://github.com/yourusername' target='_blank' class='signature'>Hrituraj Deb</a>");
+            sb.append("<a href='https://github.com/Devil1867' target='_blank' class='signature'>Hrituraj Deb</a>");
             sb.append("</footer>");
             
             sb.append("</div>");
